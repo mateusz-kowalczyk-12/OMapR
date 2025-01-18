@@ -3,11 +3,11 @@
 namespace OMapR.Application.Options;
 
 
-public class OMapROptions
+public record OMapROptions
 {
-    internal string ConnectionString { get; set; } = string.Empty;
-    internal DbProvider DbProvider { get; set; }
-
+    internal string ConnectionString { get; private set; } = string.Empty;
+    internal DbProvider DbProvider { get; private set; }
+    
     public void UseSqlServer(string connectionString)
     {
         ConnectionString = connectionString;

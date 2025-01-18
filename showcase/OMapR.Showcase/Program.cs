@@ -1,5 +1,6 @@
 using OMapR.Api;
 using OMapR.Api.DependencyInjection;
+using OMapR.Showcase.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,10 +27,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var score = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var pProxy = app.Services.GetRequiredService<IPersistenceProxy>();
-    pProxy.ConnectToDb();
+
+    pProxy
+        .AddEntityMapping<Teacher>()
+        .SetTableName("TEACHERS")
+        .SetPrimaryKey(teacher => teacher.Number);
 }
 
 app.Run();
