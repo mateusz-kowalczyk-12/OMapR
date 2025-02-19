@@ -1,11 +1,11 @@
-﻿using OMapR.Application.MappingBuilders;
+﻿using OMapR.Application.MappingConfigs;
 
 namespace OMapR.Api;
 
 
 public interface IPersistenceProxy
 {
-    EntityMappingBuilder<TEntity> AddEntityMapping<TEntity>();
+    IEntityConfig<TEntity> AddEntityMapping<TEntity>();
     
     void ConnectToDb();
 }

@@ -12,31 +12,19 @@ public class Core : ICore
     private readonly OMapROptions _options;
     private readonly List<IEntityConfig> _entityConfigs;
     
+    
     public Core(OMapROptions options)
     {
         _options = options;
         _entityConfigs = [];
     }
 
-    public void AddEntityConfig<TEntity>()
+    public IEntityConfig<TEntity> AddEntityConfig<TEntity>()
     {
-        if (_entityConfigs.Any(config => config.IsForType(typeof(TEntity))))
-            throw new MappingAlreadyExistsException(nameof(TEntity));
-
-        var newEntityConfig = new EntityConfig<TEntity>();
+        var newEntityConfig = CreateEntityConfigForType<TEntity>();
         _entityConfigs.Add(newEntityConfig);
-    }
 
-    public void SetEntityTableName<TEntity>(string tableName)
-    {
-        var entityConfig = GetEntityConfigForType<TEntity>();
-        entityConfig.TableName = tableName;
-    }
-
-    public void SetEntityPrimaryKeyProperty<TEntity>(Expression<Func<TEntity, object>> primaryKeyNavigation)
-    {
-        var entityConfig = GetEntityConfigForType<TEntity>();
-        entityConfig.PrimaryKeyNavigation = primaryKeyNavigation;
+        return newEntityConfig;
     }
     
     public void ConnectToDb()
@@ -47,6 +35,14 @@ public class Core : ICore
     }
 
 
+    private EntityConfig<TEntity> CreateEntityConfigForType<TEntity>()
+    {
+        if (_entityConfigs.Any(config => config.IsForType(typeof(TEntity))))
+            throw new MappingAlreadyExistsException(nameof(TEntity));
+
+        return new EntityConfig<TEntity>();
+    }
+    
     private EntityConfig<TEntity> GetEntityConfigForType<TEntity>()
     {
         var entityConfig = _entityConfigs.SingleOrDefault(config => config.IsForType(typeof(TEntity)));

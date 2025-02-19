@@ -1,14 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using OMapR.Application.MappingConfigs;
 
 namespace OMapR.Application;
 
 public interface ICore
 {
-    void AddEntityConfig<TEntity>();
-    
-    void SetEntityTableName<TEntity>(string tableName);
-
-    void SetEntityPrimaryKeyProperty<TEntity>(Expression<Func<TEntity, object>> primaryKeyNavigation);
+    IEntityConfig<TEntity> AddEntityConfig<TEntity>(); 
     
     void ConnectToDb();
 }
