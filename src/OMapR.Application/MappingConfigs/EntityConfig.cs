@@ -9,7 +9,7 @@ internal class EntityConfig<TEntity> : IEntityConfig<TEntity>
 {
     public string? TableName { get; set; }
     public Expression<Func<TEntity, object>>? PrimaryKeyNavigation { get; set; }
-    public IList<PropertyConfig<TEntity>> PropertyConfigs { get; set; } = new List<PropertyConfig<TEntity>>();
+    public IList<PropertyConfig<TEntity>> PropertyConfigs { get; } = new List<PropertyConfig<TEntity>>();
 
 
     public bool IsForType(Type type)
