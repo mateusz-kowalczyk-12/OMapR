@@ -14,4 +14,7 @@ public interface IEntityConfig<TEntity> : IEntityConfig
     IEntityConfig<TEntity> SetTableName(string tableName);
 
     IEntityConfig<TEntity> SetPrimaryKey(Expression<Func<TEntity, object>> primaryKeyNavigation);
+    
+    IEntityConfig<TEntity> MapProperty(
+        Expression<Func<TEntity, object>> propertyNavigation, string columnName);
 }

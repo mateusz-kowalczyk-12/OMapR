@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
+using OMapR.Application.Common.Exceptions;
 
 namespace OMapR.Application.MappingConfigs;
 
@@ -26,5 +28,39 @@ internal class EntityConfig<TEntity> : IEntityConfig<TEntity>
     {
         PrimaryKeyNavigation = primaryKeyNavigation;
         return this;
+    }
+
+    public IEntityConfig<TEntity> MapProperty(
+        Expression<Func<TEntity, object>> propertyNavigation, string columnName)
+    {
+        var newPropertyConfig = CreatePropertyConfig(propertyNavigation, columnName);
+        PropertyConfigs.Add(newPropertyConfig);
+        
+        return this;
+    }
+
+
+    private PropertyConfig<TEntity> CreatePropertyConfig(
+        Expression<Func<TEntity, object>> propertyNavigation, string columnName)
+    {
+        var newPropertyInfo = FindPropertyInfoOrDefault(propertyNavigation);
+        if (newPropertyInfo is not null)
+            throw new PropertyAlreadyMappedException(newPropertyInfo.Name);
+        
+        var newPropertyConfig = new PropertyConfig<TEntity>
+        {
+            PropertyNavigation = propertyNavigation,
+            ColumnName = columnName
+        };
+        return newPropertyConfig;
+    }
+
+    private PropertyInfo? FindPropertyInfoOrDefault(Expression<Func<TEntity, object>> propertyNavigation)
+    {
+        var searchedPropertyInfo = PropertyConfig<TEntity>.GetPropertyInfo(propertyNavigation); 
+        
+        return PropertyConfigs
+            .Select(propertyConfig => propertyConfig.GetPropertyInfo())
+            .FirstOrDefault(propertyInfo => propertyInfo == searchedPropertyInfo);
     }
 }

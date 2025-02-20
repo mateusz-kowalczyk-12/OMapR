@@ -34,7 +34,11 @@ using (var scope = app.Services.CreateScope())
     pProxy
         .AddEntityMapping<Teacher>()
         .SetTableName("TEACHERS")
-        .SetPrimaryKey(teacher => teacher.Number);
+        .SetPrimaryKey(teacher => teacher.Number)
+        .MapProperty(teacher => teacher.Number, "TNO")
+        .MapProperty(teacher => teacher.Name, "TNAME")
+        .MapProperty(teacher => teacher.Title, "TITLE")
+        .MapProperty(teacher => teacher.City, "CITY");
 }
 
 app.Run();

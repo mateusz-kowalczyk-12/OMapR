@@ -38,7 +38,7 @@ public class Core : ICore
     private EntityConfig<TEntity> CreateEntityConfigForType<TEntity>()
     {
         if (_entityConfigs.Any(config => config.IsForType(typeof(TEntity))))
-            throw new MappingAlreadyExistsException(nameof(TEntity));
+            throw new EntityMappingAlreadyExistsException(nameof(TEntity));
 
         return new EntityConfig<TEntity>();
     }
