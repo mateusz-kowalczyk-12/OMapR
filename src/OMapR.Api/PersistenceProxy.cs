@@ -1,26 +1,19 @@
 ﻿using OMapR.Application;
 using OMapR.Application.EntityAccess;
-using OMapR.Application.MappingConfigs;
 
 namespace OMapR.Api;
 
 
-public class PersistenceProxy : IPersistenceProxy
+public class PersistenceProxy
 {
-    private readonly ICore _core;
+    private readonly Core _core;
 
-    
-    public PersistenceProxy(ICore core)
+
+    public PersistenceProxy(Core core)
     {
         _core = core;
     }
     
-    public IEntityConfig<TEntity> AddEntityMapping<TEntity>()
-        where TEntity : new()
-    {
-        return _core.AddEntityConfig<TEntity>();
-    }
-
     public IEntityAccess<TEntity> AccessEntity<TEntity>()
         where TEntity : new()
     {
