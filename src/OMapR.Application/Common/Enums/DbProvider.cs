@@ -1,7 +1,7 @@
 ﻿namespace OMapR.Application.Common.Enums;
 
 
-internal enum DbProvider
+public enum DbProvider
 {
     SqlServer
 }

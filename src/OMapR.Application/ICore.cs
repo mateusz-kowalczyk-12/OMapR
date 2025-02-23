@@ -1,10 +1,13 @@
-﻿using OMapR.Application.MappingConfigs;
+﻿using OMapR.Application.EntityAccess;
+using OMapR.Application.MappingConfigs;
 
 namespace OMapR.Application;
 
 public interface ICore
 {
-    IEntityConfig<TEntity> AddEntityConfig<TEntity>(); 
+    IEntityConfig<TEntity> AddEntityConfig<TEntity>()
+        where TEntity : new(); 
     
-    void ConnectToDb();
+    IEntityAccess<TEntity> GetEntityAccess<TEntity>()
+        where TEntity : new();
 }

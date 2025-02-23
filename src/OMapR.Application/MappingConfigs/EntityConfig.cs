@@ -31,7 +31,7 @@ internal class EntityConfig<TEntity> : IEntityConfig<TEntity>
     }
 
     public IEntityConfig<TEntity> MapProperty(
-        Expression<Func<TEntity, object>> propertyNavigation, string columnName)
+        Expression<Func<TEntity, object?>> propertyNavigation, string columnName)
     {
         var newPropertyConfig = CreatePropertyConfig(propertyNavigation, columnName);
         PropertyConfigs.Add(newPropertyConfig);
@@ -41,7 +41,7 @@ internal class EntityConfig<TEntity> : IEntityConfig<TEntity>
 
 
     private PropertyConfig<TEntity> CreatePropertyConfig(
-        Expression<Func<TEntity, object>> propertyNavigation, string columnName)
+        Expression<Func<TEntity, object?>> propertyNavigation, string columnName)
     {
         var newPropertyInfo = FindPropertyInfoOrDefault(propertyNavigation);
         if (newPropertyInfo is not null)
@@ -55,7 +55,7 @@ internal class EntityConfig<TEntity> : IEntityConfig<TEntity>
         return newPropertyConfig;
     }
 
-    private PropertyInfo? FindPropertyInfoOrDefault(Expression<Func<TEntity, object>> propertyNavigation)
+    private PropertyInfo? FindPropertyInfoOrDefault(Expression<Func<TEntity, object?>> propertyNavigation)
     {
         var searchedPropertyInfo = PropertyConfig<TEntity>.GetPropertyInfo(propertyNavigation); 
         
