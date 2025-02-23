@@ -8,8 +8,9 @@ namespace OMapR.Api.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddOMapR(
-        this IServiceCollection services, Action<OMapROptions> configureOptions, Action<MappingConfigurator> mapEntities)
+    public static void AddOMapR<TMappingConfigurator>(
+        this IServiceCollection services, Action<OMapROptions> configureOptions)
+        where TMappingConfigurator : IMappingConfigurator, new()
     {
         var options = new OMapROptions();
         configureOptions(options);
@@ -17,12 +18,13 @@ public static class ServiceCollectionExtensions
 
         var mappingConfig = new MappingConfig();
         services.AddSingleton(mappingConfig);
-        
+
         var core = new Core(options, mappingConfig);
         services.AddSingleton(core);
 
-        var mappingProxy = new MappingConfigurator(core);
-        mapEntities(mappingProxy);
+        var mappingProxy = new MappingProxy(core);
+        var mappingConfigurator = new TMappingConfigurator();
+        mappingConfigurator.Configure(mappingProxy);
         
         services.AddSingleton<PersistenceProxy>();
     }

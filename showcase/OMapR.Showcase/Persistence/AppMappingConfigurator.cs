@@ -3,11 +3,11 @@ using OMapR.Showcase.Entities;
 
 namespace OMapR.Showcase.Persistence;
 
-public static class AppOMapRConfiguration
+public class AppMappingConfigurator : IMappingConfigurator
 {
-    public static void ConfigureMapping(MappingConfigurator mappingConfigurator)
+    public void Configure(MappingProxy mappingProxy)
     {
-        mappingConfigurator
+        mappingProxy
             .AddEntityMapping<Teacher>()
             .SetTableName("TEACHERS")
             .SetPrimaryKey(teacher => teacher.Number)
@@ -16,7 +16,7 @@ public static class AppOMapRConfiguration
             .MapProperty(teacher => teacher.Title, "TITLE")
             .MapProperty(teacher => teacher.City, "CITY");
 
-        mappingConfigurator
+        mappingProxy
             .AddEntityMapping<Student>()
             .SetTableName("STUDENTS")
             .SetPrimaryKey(student => student.Number)

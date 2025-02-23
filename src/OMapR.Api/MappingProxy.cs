@@ -3,12 +3,12 @@ using OMapR.Application.MappingConfigs;
 
 namespace OMapR.Api;
 
-public class MappingConfigurator
+public class MappingProxy
 {
     private readonly Core _core;
 
 
-    public MappingConfigurator(Core core)
+    public MappingProxy(Core core)
     {
         _core = core;
     }
