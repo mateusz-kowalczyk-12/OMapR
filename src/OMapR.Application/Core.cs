@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using OMapR.Application.Common.Exceptions;
+using OMapR.Application.EntityAccess;
 using OMapR.Application.MappingConfigs;
 using OMapR.Application.Options;
 
@@ -20,20 +20,22 @@ public class Core : ICore
     }
 
     public IEntityConfig<TEntity> AddEntityConfig<TEntity>()
+        where TEntity : new()
     {
         var newEntityConfig = CreateEntityConfigForType<TEntity>();
         _entityConfigs.Add(newEntityConfig);
 
         return newEntityConfig;
     }
-    
-    public void ConnectToDb()
-    {
-        using var connection = new SqlConnection(_options.ConnectionString);
-        connection.Open();
-        connection.Close();
-    }
 
+    public IEntityAccess<TEntity> GetEntityAccess<TEntity>()
+        where TEntity : new()
+    {
+        var entityConfig = GetEntityConfigForType<TEntity>();
+        var entityAccess = new EntityAccess<TEntity>(entityConfig, _options);
+        return entityAccess;
+    }
+    
 
     private EntityConfig<TEntity> CreateEntityConfigForType<TEntity>()
     {

@@ -7,12 +7,12 @@ namespace OMapR.Application.MappingConfigs;
 
 internal class PropertyConfig<TEntity>
 {
-    public required Expression<Func<TEntity, object>> PropertyNavigation { get; set; }
+    public required Expression<Func<TEntity, object?>> PropertyNavigation { get; set; }
     public required string ColumnName { get; set; }
 
     public PropertyInfo GetPropertyInfo() => GetPropertyInfo(PropertyNavigation);
     
-    public static PropertyInfo GetPropertyInfo(Expression<Func<TEntity, object>> propertyNavigation)
+    public static PropertyInfo GetPropertyInfo(Expression<Func<TEntity, object?>> propertyNavigation)
     {
         var body = propertyNavigation.Body;
         
@@ -23,5 +23,11 @@ internal class PropertyConfig<TEntity>
             return propertyInfo;
 
         throw new NotAPropertyException();
+    }
+
+    public Type GetPropertyType()
+    {
+        var propertyInfo = GetPropertyInfo();
+        return propertyInfo.PropertyType;
     }
 }

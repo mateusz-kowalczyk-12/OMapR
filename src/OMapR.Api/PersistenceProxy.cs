@@ -1,4 +1,5 @@
 ﻿using OMapR.Application;
+using OMapR.Application.EntityAccess;
 using OMapR.Application.MappingConfigs;
 
 namespace OMapR.Api;
@@ -15,12 +16,14 @@ public class PersistenceProxy : IPersistenceProxy
     }
     
     public IEntityConfig<TEntity> AddEntityMapping<TEntity>()
+        where TEntity : new()
     {
         return _core.AddEntityConfig<TEntity>();
     }
-    
-    public void ConnectToDb()
+
+    public IEntityAccess<TEntity> AccessEntity<TEntity>()
+        where TEntity : new()
     {
-        _core.ConnectToDb();
+        return _core.GetEntityAccess<TEntity>();
     }
 }
