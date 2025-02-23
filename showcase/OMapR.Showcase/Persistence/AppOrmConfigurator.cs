@@ -3,7 +3,7 @@ using OMapR.Showcase.Entities;
 
 namespace OMapR.Showcase.Persistence;
 
-public class AppMappingConfigurator : IMappingConfigurator
+public class AppOrmConfigurator : IMappingConfigurator
 {
     public void Configure(MappingProxy mappingProxy)
     {

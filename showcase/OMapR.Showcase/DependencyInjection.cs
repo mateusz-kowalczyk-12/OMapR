@@ -10,6 +10,6 @@ public static class DependencyInjection
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                                ?? throw new ArgumentException("Connection string not found.");
         
-        services.AddOMapR<AppMappingConfigurator>(options => options.UseSqlServer(connectionString));
+        services.AddOMapR<AppOrmConfigurator>(options => options.UseSqlServer(connectionString));
     }
 }
