@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using OMapR.Application.Common.Exceptions;
+﻿using OMapR.Application.Common.Exceptions;
 using OMapR.Application.EntityAccess;
 using OMapR.Application.MappingConfigs;
 using OMapR.Application.Options;
@@ -7,23 +6,22 @@ using OMapR.Application.Options;
 namespace OMapR.Application;
 
 
-public class Core : ICore
+public class Core
 {
     private readonly OMapROptions _options;
-    private readonly List<IEntityConfig> _entityConfigs;
+    private readonly MappingConfig _mappingConfig;
     
-    
-    public Core(OMapROptions options)
+    public Core(OMapROptions options, MappingConfig mappingConfig)
     {
         _options = options;
-        _entityConfigs = [];
+        _mappingConfig = mappingConfig;
     }
 
     public IEntityConfig<TEntity> AddEntityConfig<TEntity>()
         where TEntity : new()
     {
         var newEntityConfig = CreateEntityConfigForType<TEntity>();
-        _entityConfigs.Add(newEntityConfig);
+        _mappingConfig.EntityConfigs.Add(newEntityConfig);
 
         return newEntityConfig;
     }
@@ -39,7 +37,7 @@ public class Core : ICore
 
     private EntityConfig<TEntity> CreateEntityConfigForType<TEntity>()
     {
-        if (_entityConfigs.Any(config => config.IsForType(typeof(TEntity))))
+        if (_mappingConfig.EntityConfigs.Any(config => config.IsForType(typeof(TEntity))))
             throw new EntityMappingAlreadyExistsException(nameof(TEntity));
 
         return new EntityConfig<TEntity>();
@@ -47,13 +45,14 @@ public class Core : ICore
     
     private EntityConfig<TEntity> GetEntityConfigForType<TEntity>()
     {
-        var entityConfig = _entityConfigs.SingleOrDefault(config => config.IsForType(typeof(TEntity)));
+        var entityConfig = _mappingConfig.EntityConfigs
+            .SingleOrDefault(config => config.IsForType(typeof(TEntity)));
         
         if (entityConfig is null)
-            throw new MappingNotFoundException(nameof(TEntity));
+            throw new MappingNotFoundException(typeof(TEntity).Name);
         
         if (entityConfig is not EntityConfig<TEntity> entityConfigForType)
-            throw new ApplicationException("Internal OMapR exception: entityConfig's entity type inconsistency");
+            throw new InternalOMapRException("EntityConfig's entity type inconsistency.");
         
         return entityConfigForType;
     }
